@@ -1,0 +1,96 @@
+[tool.poetry]
+name = "python-sdk"
+version = "0.1.0"
+description = ""
+authors = ["Radu P <radu.popescu@bebop.xyz>"]
+readme = "README.md"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+web3 = "6.19.0"
+orjson = "3.10.7"
+eth-account = "0.11.2"
+eth-utils = "4.1.1"
+eth-typing = "3.5.2"
+python-dotenv = "1.0.1"
+pydantic = "2.9.2"
+hexbytes = "0.3.1"
+typing-extensions = "4.12.2"
+aiohttp = "3.10.6"
+pytest = "8.3.3"
+
+[tool.poetry.group.dev.dependencies]
+types-orjson = "3.6.2"
+ipykernel = "6.29.5"
+deptry = "0.20.0"
+mypy = "1.11.2"
+pre-commit = "3.8.0"
+
+
+[tool.mypy]
+files = ["python_sdk"]
+disallow_untyped_defs = "True"
+disallow_any_unimported = "True"
+no_implicit_optional = "True"
+check_untyped_defs = "True"
+warn_return_any = "True"
+warn_unused_ignores = "True"
+show_error_codes = "True"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+fix = true
+lint.select = [
+    # flake8-2020
+    "YTT",
+    # flake8-bandit
+    "S",
+    # flake8-bugbear
+    "B",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # mccabe
+    "C90",
+    # pycodestyle
+    "E", "W",
+    # pyflakes
+    "F",
+    # pygrep-hooks
+    "PGH",
+    # pyupgrade
+    "UP",
+    # ruff
+    "RUF",
+    # tryceratops
+    "TRY",
+]
+lint.ignore = [
+    # LineTooLong
+    "E501",
+    # DoNotAssignLambda
+    "E731",
+    # Assert
+    "S101",
+    # RaiseVanillaArgs
+    "TRY003",
+    # CreateYourOwnException
+    "TRY002",
+    "TRY301",
+    "RUF012"
+]
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
