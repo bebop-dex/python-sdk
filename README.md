@@ -1,3 +1,6 @@
+> [!CAUTION]
+> Use at your own risk. For testing purposes only.
+
 <h3>Running the solver integration tests</h3>
 
 1. Install the dependencies: `make install`
