@@ -27,6 +27,8 @@ async def get_quote(
     headers: dict[str, Any] | None = None,
     auth: aiohttp.BasicAuth | None = None,
 ) -> QuoteResponse:
+    source_auth = {"source-auth": quote_request.source_auth} if quote_request.source_auth else {}
+    headers = (headers or {}) | source_auth
     result = await send_request(
         env=env,
         method="get",
