@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-sdk"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Radu P <radu.popescu@bebop.xyz>"]
 readme = "README.md"

@@ -11,6 +11,7 @@ from eth_account.account import LocalAccount
 
 from python_sdk.common.types.types import Chain, Env
 from python_sdk.jam.client import JamClient
+from python_sdk.pmm.client import PMMClient
 
 if TYPE_CHECKING:
     from _pytest.config.argparsing import Parser
@@ -38,6 +39,13 @@ def pytest_addoption(parser: Parser) -> None:
         type=str,
         dest="SOLVER",
         help="Your solver emoji",
+    )
+    parser.addoption(
+        "--maker",
+        action="store",
+        type=str,
+        dest="MAKER",
+        help="Your maker emoji, suffix with 'T' for self-execution, or 'F' for fast mode",
     )
     parser.addoption(
         "--gasless",
@@ -76,6 +84,12 @@ def solver(request: pytest.FixtureRequest) -> str:
 
 
 @pytest.fixture(scope="session", autouse=True)
+def maker(request: pytest.FixtureRequest) -> str:
+    maker: str = request.config.option.MAKER
+    return maker
+
+
+@pytest.fixture(scope="session", autouse=True)
 def gasless(request: pytest.FixtureRequest) -> bool:
     gasless: str = request.config.option.GASLESS
     return gasless.lower() == "true"
@@ -96,6 +110,11 @@ def env(request: pytest.FixtureRequest) -> Env:
 @pytest.fixture(scope="session", autouse=True)
 def jam(chain: Chain, rpc: str, env: Env) -> JamClient:
     return JamClient(chain=chain, private_key=PRIVATE_KEY, rpc_url=rpc if rpc else chain.public_rpc, env=env, auth=AUTH)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def pmm(chain: Chain, rpc: str, env: Env) -> PMMClient:
+    return PMMClient(chain=chain, private_key=PRIVATE_KEY, rpc_url=rpc if rpc else chain.public_rpc, env=env, auth=AUTH)
 
 
 @pytest.fixture(scope="session", autouse=True)

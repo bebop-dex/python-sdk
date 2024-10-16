@@ -21,9 +21,19 @@ check: ## Run code quality tools.
 .PHONY: gasless-solver-test
 gasless-solver-test:
 	@echo "🚀 [$(env) env] Running solver integration tests in gasless mode..." 
-	@poetry run pytest --chain-id=$(chain-id) --gasless=true --solver=$(solver) --env=$(env) python_sdk/jam/tests/solver_integration_test.py
+	@poetry run pytest --chain-id=$(chain-id) --gasless=true --solver=$(solver) --env=$(env) tests/solver_integration_test.py
 
 .PHONY: self-exec-solver-test
 self-exec-solver-test:
 	@echo "🚀 [$(env) env] Running solver integration tests in self-execution mode..."
-	@poetry run pytest --chain-id=$(chain-id) --gasless=false --solver=$(solver) --env=$(env) python_sdk/jam/tests/solver_integration_test.py
+	@poetry run pytest --chain-id=$(chain-id) --gasless=false --solver=$(solver) --env=$(env) tests/solver_integration_test.py
+
+.PHONY: gasless-maker-test
+gasless-maker-test:
+	@echo "🚀 [$(env) env] Running maker integration tests in gasless mode..." 
+	@poetry run pytest --chain-id=$(chain-id) --gasless=true --maker=$(maker) --env=$(env) tests/maker_integration_test.py
+
+.PHONY: self-exec-maker-test
+self-exec-maker-test:
+	@echo "🚀 [$(env) env] Running maker integration tests in self-execution mode..."
+	@poetry run pytest --chain-id=$(chain-id) --gasless=false --maker=$(maker) --env=$(env) tests/maker_integration_test.py
