@@ -13,6 +13,7 @@
         - `PASSWORD=...`
 
 3. Run the tests
+
     **SOLVERS**
     - Gasless Mode: `make gasless-solver-test chain-id={CHAIN_ID} solver={SOLVER_EMOJI} env={ENV}`
     - Self-Execution Mode: `make self-exec-solver-test chain-id={CHAIN_ID} solver={SOLVER_EMOJI} env={ENV}`
