@@ -1,9 +1,15 @@
-[tool.poetry]
+[project]
 name = "python-sdk"
 version = "0.1.1"
-description = ""
-authors = ["Radu P <radu.popescu@bebop.xyz>"]
-readme = "README.md"
+description = "Python SDK for Bebop"
+authors = [
+    {name = "Rad", email = "radu.popescu@bebop.xyz"}
+]
+requires-python = ">=3.11,<3.12"
+dynamic = ["readme", "dependencies"]
+
+[tool.poetry]
+package-mode = true
 
 [build-system]
 requires = ["poetry-core"]
@@ -21,7 +27,6 @@ pydantic = "2.9.2"
 hexbytes = "0.3.1"
 typing-extensions = "4.12.2"
 aiohttp = "3.10.6"
-pytest = "8.3.3"
 
 [tool.poetry.group.dev.dependencies]
 types-orjson = "3.6.2"
