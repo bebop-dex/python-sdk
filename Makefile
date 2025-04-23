@@ -3,9 +3,8 @@ install: ## Install the poetry environment and install the pre-commit hooks
 	@echo "✔︎ Creating virtual environment using poetry"
 	@poetry install
 	@poetry run pre-commit install
-	@poetry lock --no-update
-	@poetry shell
-	@export PYTHONPATH=$(shell pwd)
+	@poetry lock
+	@source $$(poetry env info --path)/bin/activate && export PYTHONPATH=$(shell pwd)
 
 .PHONY: check
 check: ## Run code quality tools.
