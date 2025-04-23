@@ -2,7 +2,7 @@ from typing import Any
 
 import aiohttp
 from eth_account import Account
-from eth_account.account import LocalAccount
+from eth_account.signers.local import LocalAccount
 from eth_typing import HexStr
 from hexbytes import HexBytes
 from web3 import AsyncHTTPProvider, AsyncWeb3
@@ -70,10 +70,10 @@ class JamClient:
             order_status_request=OrderStatusRequest(quote_id=quote_id),
         )
 
-    async def send_gasless_order(self, request: QuoteRequest) -> OrderStatusResponse:
+    async def send_gasless_order(self, request: QuoteRequest) -> tuple[QuoteResponse, OrderStatusResponse]:
         assert self.account, "Account is required for order"
         quote: QuoteResponse = await self.get_quote(request)
-        return await send_gasless_order(
+        order_status_response: OrderStatusResponse = await send_gasless_order(
             env=self.__env,
             auth=self.__auth,
             headers=self.__headers,
@@ -81,11 +81,13 @@ class JamClient:
             account=self.account,
             quote=quote,
         )
+        return quote, order_status_response
 
-    async def send_taker_order(self, request: QuoteRequest) -> tuple[HexStr, bool]:
+    async def send_taker_order(self, request: QuoteRequest) -> tuple[QuoteResponse, HexStr, bool]:
         assert self.account, "Account is required for order"
         quote: QuoteResponse = await self.get_quote(request)
-        return await send_taker_order(chain=self.__chain, web3=self.web3, account=self.account, quote=quote)
+        tx_hash, success = await send_taker_order(chain=self.__chain, web3=self.web3, account=self.account, quote=quote)
+        return quote, tx_hash, success
 
     async def approve_token(self, token_address: str, amount: int) -> HexBytes:
         assert self.account, "Account is required for token approval"

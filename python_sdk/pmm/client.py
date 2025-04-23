@@ -2,7 +2,7 @@ from typing import Any
 
 import aiohttp
 from eth_account import Account
-from eth_account.account import LocalAccount
+from eth_account.signers.local import LocalAccount
 from eth_typing import HexStr
 from hexbytes import HexBytes
 from web3 import AsyncHTTPProvider, AsyncWeb3

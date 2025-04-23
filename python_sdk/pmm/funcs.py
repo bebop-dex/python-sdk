@@ -2,7 +2,7 @@ import asyncio
 from typing import Any
 
 import aiohttp
-from eth_account.account import LocalAccount
+from eth_account.signers.local import LocalAccount
 
 from python_sdk.common.funcs import _get_order_status, _post_order, send_request
 from python_sdk.common.types.order_types import (

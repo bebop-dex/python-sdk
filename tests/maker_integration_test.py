@@ -1,5 +1,5 @@
 import pytest
-from eth_account.account import LocalAccount
+from eth_account.signers.local import LocalAccount
 
 from python_sdk.common.constants import NATIVE_TOKEN
 from python_sdk.common.types.order_types import OrderApiStatus, OrderStatusResponse

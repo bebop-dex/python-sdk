@@ -7,7 +7,7 @@ import aiohttp
 import pytest
 from dotenv import load_dotenv
 from eth_account import Account
-from eth_account.account import LocalAccount
+from eth_account.signers.local import LocalAccount
 
 from python_sdk.common.types.types import Chain, Env
 from python_sdk.jam.client import JamClient

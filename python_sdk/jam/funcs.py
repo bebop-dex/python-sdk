@@ -2,7 +2,7 @@ import asyncio
 from typing import Any
 
 import aiohttp
-from eth_account.account import LocalAccount
+from eth_account.signers.local import LocalAccount
 
 from python_sdk.common.funcs import _get_order_status, _post_order, send_request
 from python_sdk.common.types.order_types import (
@@ -78,8 +78,8 @@ async def send_gasless_order(
         quote_id=quote.quoteId,
         signature=signature,
     )
-    await post_order(env=env, chain=chain, order_request=order_request, headers=headers, auth=auth)
-    LOGGER.info("Order sent")
+    result = await post_order(env=env, chain=chain, order_request=order_request, headers=headers, auth=auth)
+    LOGGER.info(f"Order sent. Result: {result}")
 
     retries: int = 1
     success: bool = False
@@ -96,11 +96,12 @@ async def send_gasless_order(
         if status in {OrderApiStatus.Settled, OrderApiStatus.Confirmed}:
             success = True
             break
-        if retries > 10:
+        if retries > 30:
             break
         await asyncio.sleep(1)
 
     if success:
+        LOGGER.info(f"Order completed: {order_status_response}")
         assert order_status_response.txHash
         LOGGER.info(f"Order completed: {chain.tx_link(order_status_response.txHash)}")
     else:

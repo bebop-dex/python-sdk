@@ -1,5 +1,5 @@
 import pytest
-from eth_account.account import LocalAccount
+from eth_account.signers.local import LocalAccount
 
 from python_sdk.common.constants import NATIVE_TOKEN
 from python_sdk.common.types.order_types import OrderApiStatus, OrderStatusResponse
@@ -14,18 +14,20 @@ async def send_order(jam: JamClient, quote_request: QuoteRequest) -> None:
         assert isinstance(result, OrderStatusResponse)
         assert result.status in {OrderApiStatus.Settled, OrderApiStatus.Confirmed}
     else:
-        _, success = await jam.send_taker_order(quote_request)
+        _, _, success = await jam.send_taker_order(quote_request)
         assert success is True
 
 
 # ----------------------------------- Tests ---------------------------------- #
 @pytest.mark.asyncio(loop_scope="class")
 class TestSolver:
-    async def test_121(self, chain: Chain, jam: JamClient, account: LocalAccount, solver: str, gasless: bool) -> None:
+    async def test_121_basic(
+        self, chain: Chain, jam: JamClient, account: LocalAccount, solver: str, gasless: bool
+    ) -> None:
         quote_request = QuoteRequest(
             sell_tokens=[chain.tokens["USDT"]],
             buy_tokens=[chain.tokens["WETH"]],
-            sell_amounts=[int(0.1 * 10**6)],
+            sell_amounts=[(10 * 10**6)],
             taker_address=account.address,
             include_solvers=solver,
             gasless=gasless,

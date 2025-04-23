@@ -27,12 +27,12 @@ async def quote_example() -> QuoteResponse:
     return await jam_client.get_quote(quote_request)
 
 
-async def gasless_order_example() -> OrderStatusResponse:
+async def gasless_order_example() -> tuple[QuoteResponse, OrderStatusResponse]:
     quote_request = QuoteRequest(sell_tokens=[USDT], buy_tokens=[WETH], sell_amounts=[2_000_000])
     return await jam_client.send_gasless_order(quote_request)
 
 
-async def taker_order_example() -> tuple[HexStr, bool]:
+async def taker_order_example() -> tuple[QuoteResponse, HexStr, bool]:
     quote_request = QuoteRequest(sell_tokens=[NATIVE_TOKEN], buy_tokens=[USDT], sell_amounts=[int(1e15)], gasless=False)
     return await jam_client.send_taker_order(quote_request)
 

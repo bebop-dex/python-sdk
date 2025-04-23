@@ -1,8 +1,8 @@
 from dataclasses import asdict
 
-from eth_account.account import LocalAccount
 from eth_account.datastructures import SignedMessage
 from eth_account.messages import SignableMessage, encode_typed_data
+from eth_account.signers.local import LocalAccount
 
 import python_sdk.common.types.quote_types as common_types
 from python_sdk.jam.types.eip712_types import JamOrderSchema
@@ -11,6 +11,8 @@ from python_sdk.jam.types.types import JamOrderToSign
 
 class QuoteRequest(common_types.QuoteRequest):
     include_solvers: str | None = None
+    fee: int | None = None
+    fee_recipient: str | None = None
 
 
 class QuoteResponse(common_types.QuoteResponse):

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from decimal import Decimal
 
-from eth_account.account import LocalAccount
 from eth_account.datastructures import SignedMessage
 from eth_account.messages import SignableMessage, encode_typed_data
+from eth_account.signers.local import LocalAccount
 
 from python_sdk.common.types import quote_types
 from python_sdk.pmm.types.eip712_types import (
@@ -17,6 +18,7 @@ from python_sdk.pmm.types.types import ExpiryType, QuoteToSignApiResponse
 class QuoteRequest(quote_types.QuoteRequest):
     include_makers: str | None = None
     expiry_type: ExpiryType = ExpiryType.Standard
+    fee: Decimal | None = None
 
 
 class QuoteResponse(quote_types.QuoteResponse):

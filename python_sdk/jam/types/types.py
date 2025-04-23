@@ -8,18 +8,15 @@ class JamOrderToSign(BaseModel):
     taker: str
     receiver: str
     expiry: int
+    exclusivityDeadline: int
     nonce: str
     executor: str
-    minFillPercent: int
-    hooksHash: str
+    partnerInfo: int
     sellTokens: list[str]
     buyTokens: list[str]
     sellAmounts: list[str]
     buyAmounts: list[str]
-    sellNFTIds: list[str]
-    buyNFTIds: list[str]
-    sellTokenTransfers: str
-    buyTokenTransfers: str
+    hooksHash: str
 
     @property
     def signable_message(self) -> JamOrder:
@@ -27,18 +24,15 @@ class JamOrderToSign(BaseModel):
             taker=self.taker,
             receiver=self.receiver,
             expiry=self.expiry,
+            exclusivityDeadline=self.exclusivityDeadline,
             nonce=int(self.nonce),
             executor=self.executor,
-            minFillPercent=self.minFillPercent,
+            partnerInfo=self.partnerInfo,
             hooksHash=self.hooksHash,
             sellTokens=self.sellTokens,
             buyTokens=self.buyTokens,
             sellAmounts=list(map(int, (self.sellAmounts))),
             buyAmounts=list(map(int, (self.buyAmounts))),
-            sellNFTIds=self.sellNFTIds,
-            buyNFTIds=self.buyNFTIds,
-            sellTokenTransfers=self.sellTokenTransfers,
-            buyTokenTransfers=self.buyTokenTransfers,
         )
 
 
@@ -46,15 +40,12 @@ class JamOrder(TypedDict):
     taker: str
     receiver: str
     expiry: int
+    exclusivityDeadline: int
     nonce: int
     executor: str
-    minFillPercent: int
-    hooksHash: str
+    partnerInfo: int
     sellTokens: list[str]
     buyTokens: list[str]
     sellAmounts: list[int]
     buyAmounts: list[int]
-    sellNFTIds: list[str]
-    buyNFTIds: list[str]
-    sellTokenTransfers: str
-    buyTokenTransfers: str
+    hooksHash: str

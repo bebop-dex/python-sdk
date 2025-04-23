@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import Any
 
-from eth_account.account import LocalAccount
 from eth_account.datastructures import SignedTransaction
-from eth_typing import HexStr
+from eth_account.signers.local import LocalAccount
+from eth_typing import HexAddress, HexStr
 from hexbytes import HexBytes
 from pydantic import BaseModel, Field, model_validator
 from typing_extensions import TypedDict
@@ -78,8 +79,8 @@ class ResponseToken(BaseModel):
     priceUsd: float | None = None
 
     @property
-    def amount_decimal(self) -> float:
-        return float(int(self.amount) / (10**self.decimals))
+    def amount_decimal(self) -> Decimal:
+        return Decimal(int(self.amount)) / Decimal(10**self.decimals)
 
 
 class ResponseSellToken(ResponseToken):
@@ -91,6 +92,10 @@ class ResponseBuyToken(ResponseToken):
     price: float | None = None
     priceBeforeFee: float | None = None
     amountBeforeFee: str | None = None
+
+    @property
+    def amount_before_fee_decimal(self) -> Decimal:
+        return Decimal(int(self.amountBeforeFee)) / Decimal(10**self.decimals) if self.amountBeforeFee else Decimal(0)
 
 
 ResponseSellTokens = dict[str, ResponseSellToken]
@@ -133,15 +138,33 @@ class QuoteResponse(BaseModel):
     settlementAddress: str
     approvalTarget: str
     requiredSignatures: list[str]
-    referralFeeNative: float | None = None
+    partnerFee: dict[HexAddress, str] | None = None
+    protocolFee: dict[HexAddress, str] | None = None
     tx: TxData | None = None
+
+    @property
+    def sell_usd_amount(self) -> float:
+        return sum(
+            sell_token.priceUsd * float(sell_token.amount_decimal)
+            for sell_token in self.sellTokens.values()
+            if sell_token.priceUsd
+        )
+
+    @property
+    def buy_usd_amount(self) -> float:
+        return sum(
+            buy_token.priceUsd * float(buy_token.amount_decimal)
+            for buy_token in self.buyTokens.values()
+            if buy_token.priceUsd
+        )
 
     async def sign_transaction(self, web3: AsyncWeb3, account: LocalAccount) -> HexBytes:
         """Sign transaction for self execution"""
         if not self.tx:
             raise ValueError("No tx data found, ensure `gasless`=`False` when requesting quote.")
         self.tx["nonce"] = await web3.eth.get_transaction_count(account.address)
-        if "gasPrice" not in self.tx:
-            self.tx["gasPrice"] = int((await web3.eth.gas_price) * 2)
+        self.tx["gasPrice"] = int((await web3.eth.gas_price) * 1.5)
+        assert self.tx["gas"]
+        self.tx["gas"] = int(self.tx["gas"] * 4)
         signed_tx: SignedTransaction = account.sign_transaction(self.tx)
         return signed_tx.rawTransaction

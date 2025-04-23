@@ -2,8 +2,8 @@ import asyncio
 from collections.abc import Coroutine
 from typing import Any
 
-from eth_account.account import LocalAccount
 from eth_account.datastructures import SignedTransaction
+from eth_account.signers.local import LocalAccount
 from hexbytes import HexBytes
 from web3 import AsyncWeb3
 from web3.types import TxParams, Wei
