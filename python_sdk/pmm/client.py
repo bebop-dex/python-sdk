@@ -1,5 +1,3 @@
-from typing import Any
-
 import aiohttp
 from eth_account import Account
 from eth_account.signers.local import LocalAccount
@@ -32,7 +30,7 @@ class PMMClient:
         chain: Chain,
         private_key: str | None,
         rpc_url: str | None = None,
-        source_auth: dict[str, Any] | None = None,
+        source_auth: str | None = None,
         auth: aiohttp.BasicAuth | None = None,
     ):
         self.__chain = chain
