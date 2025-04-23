@@ -81,10 +81,11 @@ class PMMClient:
             auth=self.__auth,
         )
 
-    async def send_taker_order(self, request: QuoteRequest) -> tuple[HexStr, bool]:
+    async def send_taker_order(self, request: QuoteRequest) -> tuple[QuoteResponse, HexStr, bool]:
         assert self.account, "Account is required for order"
         quote: QuoteResponse = await self.get_quote(request)
-        return await send_taker_order(chain=self.__chain, web3=self.web3, account=self.account, quote=quote)
+        tx_hash, success = await send_taker_order(chain=self.__chain, web3=self.web3, account=self.account, quote=quote)
+        return quote, tx_hash, success
 
     async def approve_token(self, token_address: str, amount: int) -> HexBytes:
         assert self.account, "Account is required for token approval"
