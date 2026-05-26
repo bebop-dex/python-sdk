@@ -283,7 +283,9 @@ class Chain(IntEnum):
     )
 
     def __init__(self, *args: Any) -> None:
-        super().__init__(*args)
+        # Python 3.14: object.__init__ no longer silently accepts extra args even
+        # when __new__ is overridden. Annotations below are for static analysis only.
+        super().__init__()
         self.id: int
         self.native_name: str
         self.native_symbol: str
