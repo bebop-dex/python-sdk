@@ -255,6 +255,33 @@ class Chain(IntEnum):
         ),
     )
 
+    avalanche = (
+        43114,
+        ChainInfo(
+            native_name="Avalanche",
+            native_symbol="AVAX",
+            wrapped_address="0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
+            wrapped_symbol="WAVAX",
+            optimism_like=False,
+            explorer="https://snowscan.xyz",
+            public_rpc="https://avalanche.drpc.org",
+            tokens={},
+        ),
+    )
+    hyperevm = (
+        999,
+        ChainInfo(
+            native_name="Hyperliquid",
+            native_symbol="HYPE",
+            wrapped_address="0x5555555555555555555555555555555555555555",
+            wrapped_symbol="WHYPE",
+            optimism_like=False,
+            explorer="https://hyperevmscan.io",
+            public_rpc="https://rpc.hyperliquid.xyz/evm",
+            tokens={},
+        ),
+    )
+
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
         self.id: int

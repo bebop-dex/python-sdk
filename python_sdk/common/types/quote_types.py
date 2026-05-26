@@ -31,8 +31,9 @@ class QuoteRequest(BaseModel):
     sell_tokens_ratios: list[float] | None = None
     skip_validation: bool = False
     gasless: bool = True
-
+    skip_taker_checks: bool = False
     source_auth: str | None = Field(default=None, exclude=True)
+    request_id: str | None = None
 
     @model_validator(mode="after")
     def assign_receiver_address(self) -> QuoteRequest:
@@ -66,6 +67,7 @@ class QuoteRequest(BaseModel):
             params["sell_tokens_ratios"] = ",".join(str(ratio) for ratio in self.sell_tokens_ratios)
         params["gasless"] = str(self.gasless).lower()
         params["skip_validation"] = str(self.skip_validation).lower()
+        params["skip_taker_checks"] = str(self.skip_taker_checks).lower()
         return params
 
 
@@ -110,6 +112,7 @@ class GasFeeResponse(BaseModel):
 TxData = TypedDict(
     "TxData",
     {
+        "chainId": int,
         "from": str | None,
         "to": str,
         "value": str,
@@ -166,5 +169,6 @@ class QuoteResponse(BaseModel):
         self.tx["gasPrice"] = int((await web3.eth.gas_price) * 1.5)
         assert self.tx["gas"]
         self.tx["gas"] = int(self.tx["gas"] * 4)
+        self.tx["chainId"] = self.chainId
         signed_tx: SignedTransaction = account.sign_transaction(self.tx)
         return signed_tx.rawTransaction
