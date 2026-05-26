@@ -28,7 +28,7 @@ async def approve_token(
     web3: AsyncWeb3, account: LocalAccount, token_address: str, amount: int, spender: str
 ) -> HexBytes:
     token_contract = web3.eth.contract(AsyncWeb3.to_checksum_address(token_address), abi=ERC20_ABI)
-    input_data = token_contract.encodeABI(fn_name="approve", args=[spender, amount])
+    input_data = token_contract.encode_abi(abi_element_identifier="approve", args=[spender, amount])
     nonce = await web3.eth.get_transaction_count(account.address)
     data = TxParams(
         **{
@@ -44,7 +44,7 @@ async def approve_token(
     gas_estimate = await web3.eth.estimate_gas(data)
     data["gas"] = gas_estimate
     signed_tx: SignedTransaction = web3.eth.account.sign_transaction(transaction_dict=data, private_key=account.key)
-    result = await web3.eth.send_raw_transaction(signed_tx.rawTransaction)
+    result = await web3.eth.send_raw_transaction(signed_tx.raw_transaction)
     await web3.eth.wait_for_transaction_receipt(result)
     LOGGER.info(f"Approved {amount=} for {token_address=} on {spender=}")
     return result

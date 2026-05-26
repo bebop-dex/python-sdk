@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Any
+from typing import Any, cast
 
 from eth_account.datastructures import SignedTransaction
 from eth_account.signers.local import LocalAccount
@@ -170,5 +170,5 @@ class QuoteResponse(BaseModel):
         assert self.tx["gas"]
         self.tx["gas"] = int(self.tx["gas"] * 4)
         self.tx["chainId"] = self.chainId
-        signed_tx: SignedTransaction = account.sign_transaction(self.tx)
-        return signed_tx.rawTransaction
+        signed_tx: SignedTransaction = account.sign_transaction(cast(dict[str, Any], self.tx))
+        return signed_tx.raw_transaction
