@@ -31,7 +31,7 @@ async def gasless_order_example() -> OrderStatusResponse:
     return await pmm_client.send_gasless_order(quote_request)
 
 
-async def taker_order_example() -> tuple[HexStr, bool]:
+async def taker_order_example() -> tuple[QuoteResponse, HexStr, bool]:
     quote_request = QuoteRequest(sell_tokens=[WETH], buy_tokens=[USDT], sell_amounts=[int(1e15)], gasless=False)
     return await pmm_client.send_taker_order(quote_request)
 
